@@ -1,0 +1,20 @@
+datasource:
+  jdbc-url: jdbc:postgresql://localhost:5432/wheremoney
+  username: disqo
+  password: disqo@pass_123
+  pool-size: 30
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+security:
+  jwt:
+    username: admin
+    password: wheremoneyapp@admin_123456
+    secret-key: 6jjzadtjrhbuwld8weh2fp2kn8eh
+    validity-in-ms: 3600000
