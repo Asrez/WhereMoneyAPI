@@ -33,8 +33,6 @@ public class JwtTokenProvider {
 
     private SecretKey secretKey;
 
-    @Autowired
-    private JwtConfig jwtConfig;
 
     @PostConstruct
     public void init() {

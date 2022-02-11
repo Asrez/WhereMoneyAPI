@@ -1,6 +1,5 @@
 package com.wheremoney.demo.service;
 
-import com.wheremoney.demo.dto.SignUpDto;
 import com.wheremoney.demo.entity.User;
 import com.wheremoney.demo.exception.ApiRequestException;
 import com.wheremoney.demo.repository.UserRepository;
@@ -26,6 +25,7 @@ public class UserService {
         if (userRepository.existsByUsername(user.getUsername()))
             throw new ApiRequestException("Username exists!", "USERNAME_EXISTS");
 
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(Arrays.asList("ROLE_USER"));
 
         userRepository.save(user);
