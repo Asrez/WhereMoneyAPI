@@ -18,3 +18,7 @@ security:
     password: wheremoneyapp@admin_123456
     secret-key: 6jjzadtjrhbuwld8weh2fp2kn8eh
     validity-in-ms: 3600000
+
+session:
+  ban-for-in-hours: 48
+  max-login-attempts: 5
