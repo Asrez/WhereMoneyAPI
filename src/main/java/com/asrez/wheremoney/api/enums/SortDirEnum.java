@@ -21,4 +21,8 @@ public enum SortDirEnum {
         throw new IllegalArgumentException(
                 "Unknown enum type " + value + ", Allowed values are " + Arrays.toString(values()));
     }
+    @Override
+    public String toString() {
+        return this.value;
+    }
 }

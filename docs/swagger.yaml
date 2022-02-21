@@ -49,10 +49,44 @@ paths:
           in: query
           required: false
           type: boolean
+        - name: page
+          in: query
+          description: page
+          required: false
+          type: integer
+          default: 0
+          format: int32
+        - name: page_size
+          in: query
+          description: page_size
+          required: false
+          type: integer
+          default: 10
+          format: int32
         - name: password
           in: query
           required: false
           type: string
+        - name: sort_by
+          in: query
+          description: sort_by
+          required: false
+          type: string
+          default: id
+          enum:
+            - id
+            - price
+            - createdDate
+            - modifiedDate
+        - name: sort_dir
+          in: query
+          description: sort_dir
+          required: false
+          type: string
+          default: asc
+          enum:
+            - asc
+            - desc
         - name: username
           in: query
           required: false
@@ -664,11 +698,19 @@ definitions:
   SignUpDto:
     type: object
     properties:
+      created_date:
+        type: string
+        format: date-time
+      email:
+        type: string
       family_name:
         type: string
       id:
         type: integer
         format: int64
+      modified_date:
+        type: string
+        format: date-time
       name:
         type: string
       password:
@@ -681,6 +723,11 @@ definitions:
     properties:
       account_number:
         type: string
+      calculate_in_monthly:
+        type: boolean
+      created_date:
+        type: string
+        format: date-time
       description:
         type: string
       destination:
@@ -690,6 +737,9 @@ definitions:
         format: int64
       is_income:
         type: boolean
+      modified_date:
+        type: string
+        format: date-time
       price:
         type: integer
         format: int64
