@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -32,6 +33,11 @@ public class User implements UserDetails {
     private String familyName;
     private String username;
     private String password;
+
+    @Column(name = "created_date")
+    private LocalDateTime createdDate;
+    @Column(name = "modified_date")
+    private LocalDateTime modifiedDate;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default

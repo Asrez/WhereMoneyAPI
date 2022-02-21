@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 
 @Data
 public class SignUpDto {
@@ -19,4 +20,9 @@ public class SignUpDto {
     private @NotBlank(message = "username can't be blank.") String username;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private @NotBlank(message = "password can't be blank.") String password;
+
+    @JsonProperty(value = "created_date", access = JsonProperty.Access.READ_ONLY)
+    private LocalDateTime createdDate;
+    @JsonProperty(value = "modified_date", access = JsonProperty.Access.READ_ONLY)
+    private LocalDateTime modifiedDate;
 }
