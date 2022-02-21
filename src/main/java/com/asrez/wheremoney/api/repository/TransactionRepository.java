@@ -11,10 +11,24 @@ import java.util.Optional;
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
-    @Query(value = "SELECT ((SELECT SUM(price) FROM transactions WHERE is_income=true AND user_id= ?1) -\n" +
-            "        (SELECT SUM(price) FROM transactions WHERE is_income=false AND user_id= ?1)\n" +
-            "       ) as balance", nativeQuery = true)
+    @Query(value = "SELECT (SELECT COALESCE(SUM(price),0)\n" +
+            "FROM transactions\n" +
+            "WHERE (is_income=TRUE AND calculate_in_monthly=TRUE AND user_id= ?1))\n" +
+            "- \n" +
+            "(SELECT COALESCE(SUM(price),0) \n" +
+            "FROM transactions\n" +
+            "WHERE (is_income=FALSE AND calculate_in_monthly=TRUE AND user_id= ?1)) AS balance", nativeQuery = true)
     Long accountBalance(Long userId);
+
+    @Query(value = "SELECT (SELECT COALESCE(SUM(price),0)\n" +
+            "FROM transactions\n" +
+            "WHERE (is_income=TRUE AND calculate_in_monthly=TRUE AND user_id= ?1)) as total_income", nativeQuery = true)
+    Long totalIncome(Long userId);
+
+    @Query(value = "SELECT (SELECT COALESCE(SUM(price),0)\n" +
+            "FROM transactions\n" +
+            "WHERE (is_income=FALSE AND calculate_in_monthly=TRUE AND user_id= ?1)) as total_income", nativeQuery = true)
+    Long totalOutcome(Long userId);
 
     Optional<Transaction> findByUserIdAndId(Long userId, Long id);
 

@@ -18,5 +18,7 @@ public class TransactionDto {
     private String description;
     @JsonProperty(value = "is_income")
     private @NotNull Boolean isIncome;
+    @JsonProperty(value = "calculate_in_monthly")
+    private @NotNull Boolean calculateInMonthly;
 
 }

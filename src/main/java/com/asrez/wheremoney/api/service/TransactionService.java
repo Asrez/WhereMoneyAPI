@@ -30,8 +30,9 @@ public class TransactionService {
     public Transaction addTransaction(UserDetails userDetails, Transaction transaction) {
         User user = getUser(userDetails);
         Long balance = transactionRepository.accountBalance(user.getId());
-        if (!allowedToMakeTransaction(balance, transaction))
-            throw new ApiRequestException("Insufficient balance!", " INSUFFICIENT_BALANCE");
+        if (transaction.getCalculateInMonthly())
+            if (!allowedToMakeTransaction(balance, transaction))
+                throw new ApiRequestException("Insufficient balance!", " INSUFFICIENT_BALANCE");
 
         transaction.setUserId(user.getId());
         return transactionRepository.save(transaction);
@@ -66,8 +67,9 @@ public class TransactionService {
                 throw new ApiRequestException("is_income has to be set in order to update the price!", " IS_INCOME_NOT_SET");
 
             Long balance = transactionRepository.accountBalance(user.getId());
-            if (!allowedToMakeTransaction(balance, transaction))
-                throw new ApiRequestException("Insufficient balance!", " INSUFFICIENT_BALANCE");
+            if (transaction.getCalculateInMonthly())
+                if (!allowedToMakeTransaction(balance, transaction))
+                    throw new ApiRequestException("Insufficient balance!", " INSUFFICIENT_BALANCE");
 
             oldTransaction.setPrice(transaction.getPrice());
         }
@@ -89,8 +91,9 @@ public class TransactionService {
                 throw new ApiRequestException("price has to be set in order to update the price!", " PRICE_NOT_SET");
 
             Long balance = transactionRepository.accountBalance(user.getId());
-            if (!allowedToMakeTransaction(balance, transaction))
-                throw new ApiRequestException("Insufficient balance!", " INSUFFICIENT_BALANCE");
+            if (transaction.getCalculateInMonthly())
+                if (!allowedToMakeTransaction(balance, transaction))
+                    throw new ApiRequestException("Insufficient balance!", " INSUFFICIENT_BALANCE");
 
             oldTransaction.setIsIncome(transaction.getIsIncome());
         }
@@ -116,13 +119,13 @@ public class TransactionService {
     public Map<Object, Object> getUserBalance(UserDetails userDetails) {
         User user = getUser(userDetails);
         Long balance = transactionRepository.accountBalance(user.getId());
-        System.out.println(balance);
-
-        if (balance == null)
-            balance = 0L;
+        Long totalIncome = transactionRepository.totalIncome(user.getId());
+        Long totalOutcome = transactionRepository.totalOutcome(user.getId());
 
         Map<Object, Object> model = new HashMap<>();
         model.put("balance", balance);
+        model.put("total_income", totalIncome);
+        model.put("total_outcome", totalOutcome);
         return model;
     }
 

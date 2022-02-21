@@ -22,5 +22,7 @@ public class Transaction {
     private String description;
     @Column(name = "is_income")
     private Boolean isIncome;
+    @Column(name = "calculate_in_monthly")
+    private Boolean calculateInMonthly;
 
 }
