@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,7 @@ public class TransactionService {
                 throw new ApiRequestException("Insufficient balance!", " INSUFFICIENT_BALANCE");
 
         transaction.setUserId(user.getId());
+        transaction.setCreatedDate(LocalDateTime.now());
         return transactionRepository.save(transaction);
     }
 
@@ -98,6 +100,7 @@ public class TransactionService {
             oldTransaction.setIsIncome(transaction.getIsIncome());
         }
 
+        oldTransaction.setModifiedDate(LocalDateTime.now());
         transactionRepository.save(oldTransaction);
         return oldTransaction;
 

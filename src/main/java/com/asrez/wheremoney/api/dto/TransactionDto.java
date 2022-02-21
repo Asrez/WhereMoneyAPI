@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Data
 public class TransactionDto {
@@ -20,5 +21,9 @@ public class TransactionDto {
     private @NotNull Boolean isIncome;
     @JsonProperty(value = "calculate_in_monthly")
     private @NotNull Boolean calculateInMonthly;
+    @JsonProperty(value = "created_date", access = JsonProperty.Access.READ_ONLY)
+    private LocalDateTime createdDate;
+    @JsonProperty(value = "modified_date", access = JsonProperty.Access.READ_ONLY)
+    private LocalDateTime modifiedDate;
 
 }

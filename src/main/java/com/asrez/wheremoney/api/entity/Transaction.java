@@ -3,6 +3,7 @@ package com.asrez.wheremoney.api.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -24,5 +25,9 @@ public class Transaction {
     private Boolean isIncome;
     @Column(name = "calculate_in_monthly")
     private Boolean calculateInMonthly;
+    @Column(name = "created_date")
+    private LocalDateTime createdDate;
+    @Column(name = "modified_date")
+    private LocalDateTime modifiedDate;
 
 }
