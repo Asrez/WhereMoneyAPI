@@ -2,18 +2,21 @@ package com.asrez.wheremoney.api.service;
 
 import com.asrez.wheremoney.api.entity.Transaction;
 import com.asrez.wheremoney.api.entity.User;
+import com.asrez.wheremoney.api.enums.SortByEnum;
+import com.asrez.wheremoney.api.enums.SortDirEnum;
 import com.asrez.wheremoney.api.exception.ApiRequestException;
 import com.asrez.wheremoney.api.repository.TransactionRepository;
 import com.asrez.wheremoney.api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class TransactionService {
@@ -49,8 +52,17 @@ public class TransactionService {
         return transactionOptional.get();
     }
 
-    public List<Transaction> getAll(UserDetails userDetails) {
-        return transactionRepository.findAllByUserId(getUser(userDetails).getId());
+    public List<Transaction> getAll(UserDetails userDetails, Integer pageNo, Integer pageSize, SortByEnum sortBy, SortDirEnum sortDir) {
+        Pageable paging = PageRequest.of(pageNo, pageSize,
+                sortDir == SortDirEnum.ASC ? Sort.by(sortBy.toString()).ascending()
+                        : Sort.by(sortBy.toString()).descending());
+        Page<Transaction> transactionPage = transactionRepository.findAllByUserId(getUser(userDetails).getId(), paging);
+
+        if (transactionPage.hasContent())
+            return transactionPage.getContent();
+
+        return new ArrayList<Transaction>();
+
     }
 
     public Transaction updateTransaction(UserDetails userDetails, Long id, Transaction transaction) {

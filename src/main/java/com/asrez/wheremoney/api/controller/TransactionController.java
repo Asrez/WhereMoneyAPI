@@ -2,7 +2,10 @@ package com.asrez.wheremoney.api.controller;
 
 import com.asrez.wheremoney.api.dto.TransactionDto;
 import com.asrez.wheremoney.api.entity.Transaction;
+import com.asrez.wheremoney.api.enums.SortByEnum;
+import com.asrez.wheremoney.api.enums.SortDirEnum;
 import com.asrez.wheremoney.api.service.TransactionService;
+import com.asrez.wheremoney.api.utils.ApplicationConst;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +15,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,8 +51,13 @@ public class TransactionController {
     }
 
     @GetMapping
-    public List<TransactionDto> getAll(@AuthenticationPrincipal UserDetails userDetails) {
-        return service.getAll(userDetails).stream().map(transaction -> modelMapper.map(transaction, TransactionDto.class))
+    public List<TransactionDto> getAll(@AuthenticationPrincipal UserDetails userDetails,
+                                       @RequestParam(defaultValue = ApplicationConst.pageNo, name = "page") @Valid @Min(0) Integer pageNo,
+                                       @RequestParam(defaultValue = ApplicationConst.pageSize, name = "page_size") @Valid @Min(1) @Max(100) Integer pageSize,
+                                       @RequestParam(defaultValue = ApplicationConst.sortBy, name = "sort_by") SortByEnum sortBy,
+                                       @RequestParam(defaultValue = ApplicationConst.sortDir, name = "sort_dir") SortDirEnum sortDir) {
+
+        return service.getAll(userDetails, pageNo, pageSize, sortBy, sortDir).stream().map(transaction -> modelMapper.map(transaction, TransactionDto.class))
                 .collect(Collectors.toList());
     }
 
