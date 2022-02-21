@@ -1,5 +1,6 @@
 package com.asrez.wheremoney.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
@@ -21,9 +22,11 @@ public class TransactionDto {
     private @NotNull Boolean isIncome;
     @JsonProperty(value = "calculate_in_monthly")
     private @NotNull Boolean calculateInMonthly;
-    @JsonProperty(value = "created_date", access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty(value = "created_date")
+    @JsonIgnoreProperties(allowGetters = true)
     private LocalDateTime createdDate;
-    @JsonProperty(value = "modified_date", access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty(value = "modified_date")
+    @JsonIgnoreProperties(allowGetters = true)
     private LocalDateTime modifiedDate;
 
 }

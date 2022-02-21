@@ -1,5 +1,6 @@
 package com.asrez.wheremoney.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
@@ -21,8 +22,10 @@ public class SignUpDto {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private @NotBlank(message = "password can't be blank.") String password;
 
-    @JsonProperty(value = "created_date", access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty(value = "created_date")
+    @JsonIgnoreProperties(allowGetters = true)
     private LocalDateTime createdDate;
-    @JsonProperty(value = "modified_date", access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty(value = "modified_date")
+    @JsonIgnoreProperties(allowGetters = true)
     private LocalDateTime modifiedDate;
 }
