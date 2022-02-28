@@ -8,6 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 
@@ -31,6 +32,7 @@ public class DataInitializer implements CommandLineRunner {
                 .username(username)
                 .password(this.passwordEncoder.encode(password))
                 .name("Admin")
+                .createdDate(LocalDateTime.now())
                 .familyName("Admin")
                 .roles(Arrays.asList("ROLE_USER", "ROLE_ADMIN"))
                 .build()
