@@ -1,0 +1,40 @@
+version: '3.1'
+services:
+  app-api:
+    image: 'where-money-api'
+    build: .
+    ports:
+      - "${API_LOCAL_PORT}:${API_DOCKER_PORT}"
+    depends_on:
+      - app-db
+
+    environment:
+      SPRING_APPLICATION_JSON: '{
+            "datasource.jdbc-url" : "jdbc:postgresql://app-db:$POSTGRES_DOCKER_PORT/$DATABASE_NAME?useSSL=$DATABASE_USE_SSL",
+      "datasource.username" : "$DATABASE_USER",
+      "datasource.password" : "$DATABASE_PASSWORD",
+      "spring.jpa.properties.hibernate.dialect" : "org.hibernate.dialect.PostgreSQLDialect",
+      "spring.jpa.hibernate.ddl-auto" : "update",
+      "security.jwt.username" : "$DEFAULT_ADMIN_USERNAME",
+      "security.jwt.password" : "$DEFAULT_ADMIN_PASSWORD",
+      "security.jwt.secret-key" : "$DEFAULT_JWT_SECRET_KEY",
+      "security.jwt.validity-in-ms" : "$DEFAULT_JWT_VALIDITY_IN_MS",
+      "session.ban-for-in-hours" : "$SESSION_BAN_FOR_IN_HOURS",
+      "session.max-login-attempts" : "$SESSION_MAX_LOGIN_ATTEMPTS"
+      }'
+
+  app-db:
+    image: postgres:latest
+    ports:
+      - "${POSTGRES_LOCAL_PORT}:${POSTGRES_DOCKER_PORT}"
+    env_file: ./.env
+    expose:
+      - $POSTGRES_DOCKER_PORT
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB_PASSWORD=$DATABASE_PASSWORD
+      - POSTGRES_DB_USER=$DATABASE_USER
+      - POSTGRES_DB_NAME=$DATABASE_NAME
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d/
