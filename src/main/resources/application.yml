@@ -1,7 +1,7 @@
 datasource:
-  jdbc-url: jdbc:postgresql://127.0.0.1:5434/wheremoneydb
-  username: admin
-  password: adminpass
+  jdbc-url: jdbc:postgresql://127.0.0.1:5432/wheremoney
+  username: disqo
+  password: disqo@pass_123
   pool-size: 30
 
 spring:

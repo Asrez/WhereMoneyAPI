@@ -32,6 +32,7 @@ public class SecurityConfig {
     SecurityFilterChain springWebFilterChain(HttpSecurity http,
                                              JwtTokenProvider tokenProvider) throws Exception {
         return http
+                .cors().and()
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
