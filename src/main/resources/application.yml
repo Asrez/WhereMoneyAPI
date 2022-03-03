@@ -23,3 +23,7 @@ security:
 session:
   ban-for-in-hours: 48
   max-login-attempts: 5
+
+
+server:
+  port: 8090
