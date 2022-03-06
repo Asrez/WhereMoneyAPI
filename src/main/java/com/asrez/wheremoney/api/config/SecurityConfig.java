@@ -7,6 +7,7 @@ import com.asrez.wheremoney.api.security.JwtTokenProvider;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -46,6 +47,7 @@ public class SecurityConfig {
                                 "/configuration/security",
                                 "/swagger-ui.html",
                                 "/webjars/**").permitAll()
+                        .antMatchers(HttpMethod.POST, "/api/v1/user").permitAll()
                         .antMatchers("/api/v1/user").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
