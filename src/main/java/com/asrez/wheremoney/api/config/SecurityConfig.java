@@ -48,6 +48,8 @@ public class SecurityConfig {
                                 "/swagger-ui.html",
                                 "/webjars/**").permitAll()
                         .antMatchers(HttpMethod.POST, "/api/v1/user").permitAll()
+                        .antMatchers(HttpMethod.GET, "/api/v1/type").hasAnyRole("ADMIN", "USER")
+                        .antMatchers("/api/v1/type").hasRole("ADMIN")
                         .antMatchers("/api/v1/user").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

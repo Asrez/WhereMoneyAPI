@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
@@ -20,9 +21,9 @@ public class Type {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
-    private String name;
+    private @NotNull String name;
     @Column(name = "icon_name")
     @JsonProperty(value = "icon_name")
-    private String iconName;
+    private @NotNull String iconName;
 
 }

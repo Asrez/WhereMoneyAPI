@@ -51,6 +51,9 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void addTypes() {
+        if (!typeRepository.findAll().isEmpty())
+            return;
+
         List<Type> types = new ArrayList<>();
         types.add(new Type().builder()
                 .name("EDUCATION")
