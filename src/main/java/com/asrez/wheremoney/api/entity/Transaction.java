@@ -29,5 +29,8 @@ public class Transaction {
     private LocalDateTime createdDate;
     @Column(name = "modified_date")
     private LocalDateTime modifiedDate;
+    @OneToOne
+    @JoinColumn(name = "type_id", nullable = false)
+    private Type type;
 
 }

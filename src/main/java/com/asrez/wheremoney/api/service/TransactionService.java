@@ -1,12 +1,15 @@
 package com.asrez.wheremoney.api.service;
 
+import com.asrez.wheremoney.api.dto.TransactionDto;
 import com.asrez.wheremoney.api.entity.Transaction;
+import com.asrez.wheremoney.api.entity.Type;
 import com.asrez.wheremoney.api.entity.User;
 import com.asrez.wheremoney.api.enums.SortByEnum;
 import com.asrez.wheremoney.api.enums.SortDirEnum;
 import com.asrez.wheremoney.api.exception.ApiRequestException;
 import com.asrez.wheremoney.api.repository.TransactionRepository;
 import com.asrez.wheremoney.api.repository.UserRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,23 +25,32 @@ import java.util.*;
 public class TransactionService {
 
     private final TransactionRepository transactionRepository;
+    private final TypeService typeService;
     private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public TransactionService(TransactionRepository transactionRepository, UserRepository userRepository) {
+    public TransactionService(TransactionRepository transactionRepository, TypeService typeService, UserRepository userRepository, ModelMapper modelMapper) {
         this.transactionRepository = transactionRepository;
+        this.typeService = typeService;
         this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
     }
 
 
-    public Transaction addTransaction(UserDetails userDetails, Transaction transaction) {
+    public Transaction addTransaction(UserDetails userDetails, TransactionDto transactionDto) {
         User user = getUser(userDetails);
         Long balance = transactionRepository.accountBalance(user.getId());
+        Type type = typeService.getType(transactionDto.getTypeId());
+
+        Transaction transaction = modelMapper.map(transactionDto, Transaction.class);
+
         if (transaction.getCalculateInMonthly())
             if (!allowedToMakeTransaction(balance, transaction))
                 throw new ApiRequestException("Insufficient balance!", " INSUFFICIENT_BALANCE");
 
         transaction.setUserId(user.getId());
+        transaction.setType(type);
         transaction.setCreatedDate(LocalDateTime.now());
         return transactionRepository.save(transaction);
     }
@@ -65,13 +77,22 @@ public class TransactionService {
 
     }
 
-    public Transaction updateTransaction(UserDetails userDetails, Long id, Transaction transaction) {
+    public Transaction updateTransaction(UserDetails userDetails, Long id, TransactionDto transactionDto) {
         User user = getUser(userDetails);
         Optional<Transaction> transactionOptional = transactionRepository.findByUserIdAndId(user.getId(), id);
         if (transactionOptional.isEmpty())
             throw new ApiRequestException("Transaction not found!", " TRANSACTION_NOT_FOUND");
 
+
+        Transaction transaction = modelMapper.map(transactionDto, Transaction.class);
+
         Transaction oldTransaction = transactionOptional.get();
+
+        if (transactionDto.getTypeId() != null) {
+            Type type = typeService.getType(transactionDto.getTypeId());
+            oldTransaction.setType(type);
+        }
+
         if (transaction.getSource() != null) {
             oldTransaction.setSource(transaction.getSource());
         }

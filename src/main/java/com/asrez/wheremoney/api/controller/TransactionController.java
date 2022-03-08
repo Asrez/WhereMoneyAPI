@@ -39,8 +39,7 @@ public class TransactionController {
 
     @PostMapping
     public ResponseEntity<TransactionDto> addTransaction(@AuthenticationPrincipal UserDetails userDetails, @Valid @RequestBody TransactionDto transactionDto) {
-        Transaction transaction = modelMapper.map(transactionDto, Transaction.class);
-        TransactionDto transactionDtoResponse = modelMapper.map(service.addTransaction(userDetails, transaction), TransactionDto.class);
+        TransactionDto transactionDtoResponse = modelMapper.map(service.addTransaction(userDetails, transactionDto), TransactionDto.class);
         return ok(transactionDtoResponse);
     }
 
@@ -63,8 +62,7 @@ public class TransactionController {
 
     @PutMapping("{id}")
     public ResponseEntity<TransactionDto> updateTransaction(@AuthenticationPrincipal UserDetails userDetails, @PathVariable("id") Long id, @RequestBody TransactionDto transactionDto) {
-        Transaction transaction = modelMapper.map(transactionDto, Transaction.class);
-        TransactionDto transactionDtoResponse = modelMapper.map(service.updateTransaction(userDetails, id, transaction), TransactionDto.class);
+        TransactionDto transactionDtoResponse = modelMapper.map(service.updateTransaction(userDetails, id, transactionDto), TransactionDto.class);
         return ok(transactionDtoResponse);
     }
 

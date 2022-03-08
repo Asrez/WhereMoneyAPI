@@ -1,5 +1,6 @@
 package com.asrez.wheremoney.api.dto;
 
+import com.asrez.wheremoney.api.entity.Type;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -28,5 +29,11 @@ public class TransactionDto {
     @JsonProperty(value = "modified_date")
     @JsonIgnoreProperties(allowGetters = true)
     private LocalDateTime modifiedDate;
+
+    @JsonProperty(value = "type_id")
+    @JsonIgnoreProperties(allowSetters = true)
+    private Long typeId;
+    @JsonIgnoreProperties(allowGetters = true)
+    private Type type;
 
 }
